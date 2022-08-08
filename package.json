@@ -7,9 +7,12 @@
     "start:dev": "nodemon ./bin/ww"
   },
   "dependencies": {
+    "async": "^3.2.4",
     "debug": "~2.6.9",
+    "dotenv": "^16.0.1",
     "express": "~4.16.1",
     "http-errors": "~1.6.3",
+    "mongoose": "^6.5.1",
     "morgan": "~1.9.1",
     "pug": "^3.0.2"
   },

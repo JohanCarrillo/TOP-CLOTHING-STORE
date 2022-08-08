@@ -4,10 +4,24 @@ const createError = require('http-errors');
 const express = require('express');
 const { join } = require('path');
 const logger = require('morgan');
+const mongoose = require('mongoose');
+const dotenv = require('dotenv');
 
+// load environment variables
+const envVars = dotenv.config();
+if (envVars.error) throw('error loading env files: ', envVars.error);
+
+// routes
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
 
+// database connection
+const mongoDB = process.env.MONGODBCONNECTION;
+mongoose.connect(mongoDB, { useNewUrlParser: true , useUnifiedTopology: true});
+const db = mongoose.connection;
+db.on('error', console.error.bind(console, 'MongoDB connection error:'));
+
+// initialize app
 const app = express();
 
 // view engine setup

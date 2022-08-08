@@ -4,9 +4,9 @@ const { model, Schema } = require('mongoose');
 
 const ItemSchema = new Schema({
 	name: {type: String, required: true},
-	desccription: {type: String, required: true, maxLength: 100, minLength: 5},
+	description: {type: String, required: true, maxLength: 100, minLength: 5},
 	price: {type: Number, required: true},
-	collection: {type: Schema.Types.ObjectId, ref: 'Collection'},
+	cloth_collection: {type: Schema.Types.ObjectId, ref: 'ClothCollection'},
 	category: {type: Schema.Types.ObjectID, ref: 'Category'},
 	sizes: {type: [String], required: true}
 });
