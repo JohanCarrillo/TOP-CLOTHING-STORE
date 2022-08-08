@@ -11,9 +11,12 @@ const dotenv = require('dotenv');
 const envVars = dotenv.config();
 if (envVars.error) throw('error loading env files: ', envVars.error);
 
-// routes
+// load routers
 const indexRouter = require('./routes/index');
-const usersRouter = require('./routes/users');
+const itemRouter = require('./routes/item');
+const itemInstanceRouter = require('./routes/itemInstance');
+const clothCollectionRouter = require('./routes/clothCollection');
+const categoryRouter = require('./routes/category');
 
 // database connection
 const mongoDB = process.env.MONGODBCONNECTION;
@@ -33,8 +36,12 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static(join(__dirname, 'public')));
 
+// ldefined routes
 app.use('/', indexRouter);
-app.use('/users', usersRouter);
+app.use('/item', itemRouter);
+app.use('/instance', itemInstanceRouter);
+app.use('/category', categoryRouter);
+app.use('/collection', clothCollectionRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

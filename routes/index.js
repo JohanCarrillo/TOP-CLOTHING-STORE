@@ -1,9 +1,10 @@
+'use strict'
+
 const { Router } = require('express');
 const router = Router();
 
-/* GET home page. */
-router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Express' });
-});
+const indexController = require('../controllers/indexController');
+
+router.get('/', indexController);
 
 module.exports = router;
