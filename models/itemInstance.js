@@ -9,7 +9,7 @@ const ItemInstanceSchema = new Schema({
 });
 
 ItemInstanceSchema.virtual('url').get(() => {
-	return '/catalog/itemInstance/' + this._id;
+	return '/itemInstance/' + this._id;
 });
 
 module.exports = model('ItemInstance', ItemInstanceSchema);

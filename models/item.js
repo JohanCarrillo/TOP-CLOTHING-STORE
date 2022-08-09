@@ -12,7 +12,8 @@ const ItemSchema = new Schema({
 });
 
 ItemSchema.virtual('url').get(() => {
-	return '/catalog/item/' + this._id;
+	console.log('/item/' + this._id)
+	return '/item/' + this._id;
 });
 
 module.exports = model('Item', ItemSchema);

@@ -8,7 +8,7 @@ const ClothCollectionSchema = new Schema({
 });
 
 ClothCollectionSchema.virtual('url').get(() => {
-	return '/catalog/collection/' + this._id;
+	return '/collection/' + this._id;
 });
 
 module.exports = model('ClothCollection', ClothCollectionSchema);
