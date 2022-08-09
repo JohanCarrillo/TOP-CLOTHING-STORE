@@ -2,6 +2,32 @@ doctype html
 html
   head
     title= title
+    meta(charset='utf-8')
+    meta(name='viewport', content='width=device-width, initial-scale=1')
     link(rel='stylesheet', href='/stylesheets/style.css')
   body
-    block content
+    div(id='left-column')
+      ul(id='sidebar-nav')
+        li
+          a(href='/') Home
+        li
+          a(href='/item') Items
+        li
+          a(href='/instance') Available Items
+        li
+          a(href='/collection') Collections
+        li
+          a(href='/category') Categories
+        li 
+          br
+        li 
+          a(href='/item/create') Add Item
+        li 
+          a(href='/instance/create') Add Item Instance
+        li 
+          a(href='/collection/create') Add Collection
+        li 
+          a(href='/category/create') Add Category
+
+    div(id='right-column')
+      block content

@@ -1,5 +1,11 @@
 'use strict'
 
+const async = require('async');
+const mongoose = require('mongoose');
+const { body, validationResult } = require('express-validator');
+
+const Category = require('../models/category');
+
 function categoryCreateGet (req, res, next) {
 	res.send('NOT IMPLEMENTED: category create get');
 }
@@ -29,7 +35,16 @@ function categoryDetail(req, res, next) {
 }
 
 function categoryList(req, res, next) {
-	res.send('NOT IMPLEMENTED: category list');
+	
+	Category.find()
+		.sort({ name: 1 })
+		.exec((err, categories) => {
+			if (err) return next(err);
+			res.render('category_list', {
+				title: 'Category List',
+				category_list: categories
+			});
+		});
 }
 
 

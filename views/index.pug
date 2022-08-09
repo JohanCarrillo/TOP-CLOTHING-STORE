@@ -2,4 +2,18 @@ extends layout
 
 block content
   h1= title
-  p Welcome to #{title}
+  p Welcome to #[em Clothing Store], a very basic website for a catalog manager of a clothing store.
+
+  h1 Content
+
+  if error
+    p Error getting content.
+  else
+    p The store has the following record counts:
+
+    ul
+      li #[strong Items:] #{data.itemCount} in total
+      li #[strong Collections:] #{data.collectionCount} in total
+      li #[strong Items available in main store:] #{data.itemInstanceInMainStoreCount} in total
+      li #[strong Items available in other stores:] #{data.itemInstanceNotInMainStoreCount} in total
+      li #[strong Categories:] #{data.categoryCount} in total

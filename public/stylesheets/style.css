@@ -1,8 +1,45 @@
 body {
-  padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  padding: 10px;
+  font: 1.1em "Lucida Grande", Helvetica, Arial, sans-serif;
+  display: flex;
+  width: 90vw;
+  height: 95vh;
 }
 
-a {
-  color: #00B7FF;
+a:link {
+  color: #9100bd;
 }
+a:visited {
+  color: #41005f;
+}
+
+/* ------------------------------------------------------------------------ */
+
+#left-column {
+  flex: 1 1 auto;
+  border-right: solid rgb(0, 0, 170) 2px;
+  padding: 5px;
+  background-color: rgb(158, 158, 255);
+  font: inherit;
+}
+
+ul#sidebar-nav {
+  list-style-type: none;
+  padding-inline-start: 0px;
+  padding: 5%;
+  padding-top: 40%;
+}
+#sidebar-nav > li {
+  text-align: center;
+  padding-bottom: 1.5vh;
+  font-size: 1.2em;
+}
+
+/* ------------------------------------------------------------------------ */
+
+#right-column {
+  flex: 4 1 auto;
+  padding: 3%;
+}
+
+
