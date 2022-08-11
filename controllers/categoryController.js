@@ -72,7 +72,6 @@ function categoryDeleteGet(req, res, next) {
 }
 
 function categoryDeletePost(req, res, next) {
-	console.log('delete controller called')
 	async.parallel({
     category: function(callback) {
       Category.findById(req.body.categoryId).exec(callback);
@@ -99,12 +98,44 @@ function categoryDeletePost(req, res, next) {
 }
 
 function categoryUpdateGet(req, res, next) {
-	res.send('NOT IMPLEMENTED: category update get');
+	Category.findById(req.params.id).exec((err, category) => {
+    if (err) return next(err);
+    if (category == null) {
+      const err = new Error('Category not found');
+      err.status = 404;
+      return next(err);
+    }
+    res.render('category_form', {
+      title: 'Category Update',
+      category: category
+    });
+  });
 }
 
-function categoryUpdatePut(req, res, next) {
-	res.send('NOT IMPLEMENTED: category update put');
-}
+const categoryUpdatePost = [
+
+  body('name', 'Name must not be empty').trim().isLength({min: 1}).escape(),
+
+  function (req, res, next) {
+
+	  const errors = validationResult(req);
+    const category = new Category({ name: req.body.name, _id: req.params.id });
+
+    if (!errors.isEmpty()) {
+      res.render('category_form', {
+        title: 'Category Update', 
+        category: category,
+        errors: errors.array()
+      })
+    } else {
+      Category.findByIdAndUpdate(req.params.id, category, {}, (err, updatedCategory) => {
+        if (err) return next(err);
+        console.log(updatedCategory)
+        res.redirect(updatedCategory.url);
+      });
+    }
+  }
+]
 
 function categoryDetail(req, res, next) {
 	const id = mongoose.Types.ObjectId(req.params.id);
@@ -151,7 +182,7 @@ module.exports = {
 	categoryDeleteGet,
 	categoryDeletePost,
 	categoryUpdateGet,
-	categoryUpdatePut,
+	categoryUpdatePost,
 	categoryDetail,
 	categoryList
 }

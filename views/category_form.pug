@@ -7,7 +7,7 @@ block content
   form(method='POST' action='')
     div(class='form-container')
       label(for='name') Category name:
-      input(id='name' class='text-input')(type='text', placeholder='Head, Hands, legs...' name='name' required='true' value=(category == undefined ? '' : category.name))
+      input(id='name' class='text-input' type='text', placeholder='Head, Hands, legs...' name='name' required='true' value=(category == undefined ? '' : category.name))
     button(class='submit-button' type='submit') Submit
 
   if errors 
