@@ -3,7 +3,7 @@
 const { model, Schema } = require('mongoose');
 
 const CategorySchema = new Schema({
-	name: {type: String, required: true}
+	name: {type: String, required: true, minLength: 5}
 });
 
 CategorySchema.virtual('url').get(function() {

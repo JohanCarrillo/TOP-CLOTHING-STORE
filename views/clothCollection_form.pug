@@ -1,0 +1,20 @@
+extends layout
+
+block content 
+  h1= title 
+
+  form(method='POST' action='')
+    div(class='form-container')
+      div.form-element
+        label(for='name') Collection name: 
+        input(id='name' class='text-input' type='text', placeholder='Winter, Fall...' name='name' required='true' value=(collection == undefined ? '' : collection.name))
+      br
+      div.form-element
+        label(for='description') Collection description: 
+        input(id='description' class='text-input' type='text', placeholder='This collection is made for...' name='description' required='true' value=(collection == undefined ? '' : collection.description))
+    button(class='submit-button' type='submit') Submit
+
+  if errors 
+    ul
+      for error in errors
+        li= error.msg

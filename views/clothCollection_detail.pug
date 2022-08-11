@@ -1,0 +1,26 @@
+extends layout 
+
+block content 
+
+  h1 Collection: #{collection.name}
+
+  div #[strong Description]: #{collection.description}
+
+  div
+
+    h4 Items
+
+    dl
+      each item in item_list
+        dt
+          a(href=item.url) #{item.name}
+        dd #{item.description}
+
+      else
+        p This collection has no items
+
+  hr
+  p
+    a(href=collection.url+'/delete') Delete collection
+  p
+    a(href=collection.url+'/update') Update collection

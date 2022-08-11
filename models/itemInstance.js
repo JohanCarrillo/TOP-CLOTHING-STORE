@@ -8,7 +8,7 @@ const ItemInstanceSchema = new Schema({
 	store: {type: String, default: 'main store'}
 });
 
-ItemInstanceSchema.virtual('url').get(() => {
+ItemInstanceSchema.virtual('url').get(function() {
 	return '/itemInstance/' + this._id;
 });
 

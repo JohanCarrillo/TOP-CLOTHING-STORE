@@ -1,0 +1,29 @@
+extends layout 
+
+block content 
+
+  h1 Delete Collection: #{collection.name}
+
+  if items.length > 0
+  
+    p #[strong Delete the following items before attempting to delete this collection.]
+  
+    div(style='margin-left:20px;margin-top:20px')
+
+      h4 Items
+    
+      dl
+      for item in items
+        dt 
+          a(href=item.url) #{item.name}
+        dd #{item.description}
+
+  else
+    p Do you really want to delete this collection?
+    
+    form(method='POST' action='')
+      div(class='form-container')
+        input#id.form-control(type='hidden', name='collectionId', required='true', value=collection.id )
+
+      button.sumit-button(type='submit') Delete
+

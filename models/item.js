@@ -11,7 +11,7 @@ const ItemSchema = new Schema({
 	sizes: {type: [String], required: true}
 });
 
-ItemSchema.virtual('url').get(() => {
+ItemSchema.virtual('url').get(function() {
 	console.log('/item/' + this._id)
 	return '/item/' + this._id;
 });

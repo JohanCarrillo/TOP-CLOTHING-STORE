@@ -119,14 +119,17 @@ const categoryUpdatePost = [
   function (req, res, next) {
 
 	  const errors = validationResult(req);
-    const category = new Category({ name: req.body.name, _id: req.params.id });
+    const category = new Category({ 
+      name: req.body.name, 
+      _id: req.params.id 
+    });
 
     if (!errors.isEmpty()) {
       res.render('category_form', {
         title: 'Category Update', 
         category: category,
         errors: errors.array()
-      })
+      });
     } else {
       Category.findByIdAndUpdate(req.params.id, category, {}, (err, updatedCategory) => {
         if (err) return next(err);

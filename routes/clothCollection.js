@@ -11,10 +11,10 @@ router.get('/create', clothCollectionController.clothCollectionCreateGet);
 router.post('/create', clothCollectionController.clothCollectionCreatePost);
 
 router.get('/:id/delete', clothCollectionController.clothCollectionDeleteGet);
-router.delete('/:id/delete', clothCollectionController.clothCollectionDeleteDelete);
+router.post('/:id/delete', clothCollectionController.clothCollectionDeletePost);
 
 router.get('/:id/update', clothCollectionController.clothCollectionUpdateGet);
-router.put('/:id/update', clothCollectionController.clothCollectionUpdatePut);
+router.post('/:id/update', clothCollectionController.clothCollectionUpdatePost);
 
 router.get('/:id', clothCollectionController.clothCollectionDetail);
 

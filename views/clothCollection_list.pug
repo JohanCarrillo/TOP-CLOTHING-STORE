@@ -1,0 +1,13 @@
+extends layout 
+
+block content
+  h1= title 
+
+  - collection_list.sort((a, b) => {let textA = a.name.toUpperCase(); let textB = b.name.toUpperCase(); return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;});
+  ul
+    each collection in collection_list
+      li
+        a(href=collection.url) #{collection.name}
+
+    else
+      li There are no collections registered.

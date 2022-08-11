@@ -7,8 +7,8 @@ const ClothCollectionSchema = new Schema({
 	description: {type: String, required: true, maxLength: 100, minLength: 5},
 });
 
-ClothCollectionSchema.virtual('url').get(() => {
-	return '/collection/' + this._id;
+ClothCollectionSchema.virtual('url').get(function() {
+	return '/collection/' + this.id;
 });
 
 module.exports = model('ClothCollection', ClothCollectionSchema);
