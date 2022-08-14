@@ -1,0 +1,17 @@
+extends layout 
+
+block content 
+
+	h1 Instance of Item:  #{itemInstance.item.name}
+
+	ul  
+		li #[strong Item:] 
+			a(href=itemInstance.item.url) #{itemInstance.item.name} 
+		li #[strong Available in:] #{itemInstance.store}
+		li #[strong Number of instances:] #{itemInstance.number_in_stock}
+
+	hr
+	p
+		a(href=itemInstance.url+'/delete') Delete instance
+	p
+		a(href=itemInstance.url+'/update') Update instance

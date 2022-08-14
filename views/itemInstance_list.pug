@@ -1,0 +1,15 @@
+extends layout
+
+block content 
+
+  h1= title 
+
+  - itemInstance_list.sort((a, b) => {let textA = a.item.name.toUpperCase(); let textB = b.item.name.toUpperCase(); return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;});
+  
+  ul
+    each itemInstance in itemInstance_list
+      li
+        a(href=itemInstance.url) #{itemInstance.item.name} in #[strong #{itemInstance.store}]
+
+    else
+      li There are no instances registered.

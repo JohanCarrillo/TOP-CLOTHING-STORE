@@ -11,10 +11,10 @@ router.get('/create', itemInstanceController.itemInstanceCreateGet);
 router.post('/create', itemInstanceController.itemInstanceCreatePost);
 
 router.get('/:id/delete', itemInstanceController.itemInstanceDeleteGet);
-router.delete('/:id/delete', itemInstanceController.itemInstanceDeleteDelete);
+router.post('/:id/delete', itemInstanceController.itemInstanceDeletePost);
 
 router.get('/:id/update', itemInstanceController.itemInstanceUpdateGet);
-router.put('/:id/update', itemInstanceController.itemInstanceUpdatePut);
+router.post('/:id/update', itemInstanceController.itemInstanceUpdatePost);
 
 router.get('/:id', itemInstanceController.itemInstanceDetail);
 
