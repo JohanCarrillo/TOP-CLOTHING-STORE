@@ -64,20 +64,105 @@ const itemInstanceCreatePost = [
 ];
 
 function itemInstanceDeleteGet(req, res, next) {
-	res.send("NOT IMPLEMENTED: itemInstance delete get");
+	ItemInstance.findById(req.params.id)
+		.populate("item")
+		.exec((err, foundItemInstance) => {
+			if (err) return next(err);
+			if (foundItemInstance == null) {
+				res.redirect("/instance");
+			}
+			res.render("itemInstance_delete", {
+				title: "Delete Item",
+				instance: foundItemInstance,
+			});
+		});
 }
 
 function itemInstanceDeletePost(req, res, next) {
-	res.send("NOT IMPLEMENTED: itemInstance delete delete");
+	ItemInstance.findById(req.body.instanceId)
+		.populate("item")
+		.exec((err, foundItemInstance) => {
+			if (err) return next(err);
+			if (foundItemInstance == null) {
+				const err = new Error("Item Instance not Found");
+				err.status = 404;
+				return next(err);
+			} else {
+				ItemInstance.findByIdAndRemove(req.body.instanceId, err => {
+					if (err) return next(err);
+					res.redirect("/instance");
+				});
+			}
+		});
 }
 
 function itemInstanceUpdateGet(req, res, next) {
-	res.send("NOT IMPLEMENTED: itemInstance update get");
+	async.parallel(
+		{
+			itemInstance(callback) {
+				ItemInstance.findById(req.params.id).populate("item").exec(callback);
+			},
+			items(callback) {
+				Item.find().exec(callback);
+			},
+		},
+		(err, results) => {
+			if (err) return next(err);
+			if (results.itemInstance == null) {
+				const err = new Error("Item Instance not Found");
+				err.status = 404;
+				return next(err);
+			} else {
+				res.render("itemInstance_form", {
+					title: "Update Item Instance",
+					instance: results.itemInstance,
+					item_list: results.items,
+				});
+			}
+		}
+	);
 }
 
-function itemInstanceUpdatePost(req, res, next) {
-	res.send("NOT IMPLEMENTED: itemInstance update put");
-}
+const itemInstanceUpdatePost = [
+	body("number_in_stock").trim().escape(),
+	body("store").trim().escape(),
+
+	(req, res, next) => {
+		const errors = validationResult(req);
+
+		const instance = new ItemInstance({
+			item: req.body.item,
+			number_in_stock:
+				req.body.number_in_stock == "" ? undefined : req.body.number_in_stock,
+			store: req.body.store,
+			_id: req.params.id,
+		});
+
+		if (!errors.isEmpty()) {
+			Item.find().exec((err, items) => {
+				if (err) return next(err);
+
+				res.render("itemInstance_form", {
+					title: "Update Item Instance",
+					item_list: items,
+					instance: instance,
+					errors: errors.array(),
+				});
+			});
+			return;
+		} else {
+			ItemInstance.findByIdAndUpdate(
+				req.params.id,
+				instance,
+				{},
+				(err, updatedItemInstance) => {
+					if (err) return next(err);
+					res.redirect(updatedItemInstance.url);
+				}
+			);
+		}
+	},
+];
 
 function itemInstanceDetail(req, res, next) {
 	ItemInstance.findById(req.params.id)

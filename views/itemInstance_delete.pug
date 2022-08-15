@@ -1,0 +1,20 @@
+extends layout 
+
+block content 
+
+	h1 Delete Instance of: 
+		a(href='instance.item.url') #{instance.item.name}
+
+	ul
+		li #[strong Number of instances:] #{instance.number_in_stock}
+		li #[strong Store:] #{instance.store}
+
+	hr
+
+	h3 Do you really want to delete this instance?
+	
+	form(method='POST' action='')
+		div(class='form-container')
+			input#id.form-control(type='hidden', name='instanceId', required='true', value=instance.id )
+		button.sumit-button(type='submit') Delete
+
