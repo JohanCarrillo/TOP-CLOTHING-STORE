@@ -29,12 +29,84 @@ function itemCreateGet(req, res, next) {
 	);
 }
 
-function itemCreatePost(req, res, next) {
-	res.send(req.body);
-}
+const itemCreatePost = [
+	body("name", "Name must not be empty.").trim().isLength({ min: 1 }).escape(),
+	body("description", "Description must not be empty.")
+		.trim()
+		.isLength({ min: 1 })
+		.escape(),
+	body("price", "Invalid price")
+		.trim()
+		.isLength({ min: 1 })
+		.isFloat({ min: 0 })
+		.toFloat(),
+
+	(req, res, next) => {
+		const errors = validationResult(req);
+
+		var item = new Item({
+			name: req.body.name,
+			description: req.body.description,
+			price: req.body.price,
+			cloth_collection: req.body.collection,
+			category: req.body.category,
+			sizes: req.body.size,
+		});
+
+		if (!errors.isEmpty()) {
+			async.parallel(
+				{
+					collections(callback) {
+						ClothCollection.find().exec(callback);
+					},
+					categories(callback) {
+						Category.find().exec(callback);
+					},
+				},
+				(err, results) => {
+					if (err) return next(err);
+					res.render("item_form", {
+						title: "Add New Item",
+						collection_list: results.collections,
+						category_list: results.categories,
+						item: item,
+						errors: errors.array(),
+					});
+				}
+			);
+			return;
+		} else {
+			item.save(err => {
+				if (err) return next(err);
+				res.redirect(item.url);
+			});
+		}
+	},
+];
 
 function itemDeleteGet(req, res, next) {
-	res.send("NOT IMPLEMENTED: item delete get");
+	async.parallel(
+		{
+			foundItem(callback) {
+				Item.findById(req.params.id)
+					.populate("category")
+					.populate("cloth_collection")
+					.exec(callback);
+			},
+			itemInstances(callback) {
+				ItemInstance.find({ item: req.params.id }).exec(callback);
+			},
+		},
+		(err, results) => {
+			if (err) return next(err);
+			if (results.foundItem == null) res.redirect("/item");
+			res.render("item_delete", {
+				title: "Delete Item",
+				item: results.foundItem,
+				itemInstance_list: results.itemInstances,
+			});
+		}
+	);
 }
 
 function itemDeletePost(req, res, next) {

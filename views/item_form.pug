@@ -2,8 +2,6 @@ extends layout
 
 block content 
 
-	- const checkedFunction = (size, itemSize) => size == itemSize ? true : '';
-
 	h1= title 
 
 	form(method='POST' action='')
@@ -23,9 +21,9 @@ block content
 				each size in sizes 
 					div(style='display: inline')
 						if item 
-							input(class='checkbox-input' type='checkbox' name=size value=size checked=(checkedFunction(size, item.size)))
+							input(class='checkbox-input' type='checkbox' name='size' value=size checked=(item.sizes.includes(size)))
 						else 
-							input(class='checkbox-input' type='checkbox' name=size value=size)
+							input(id=size class='checkbox-input' type='checkbox' name='size' value=size)
 						label(for=size) #{size} 
 		div(class='form-element select-input-container')
 			label(for='collection') Collection 
@@ -35,7 +33,7 @@ block content
 					if item 
 						option(
 							value=collection.id 
-							selected=(item.collection.id == collection.id ? 'true' : 'false')
+							selected=(item.cloth_collection._id.toString() == collection.id)
 						) #{collection.name}
 					else 
 						option(value=collection.id) #{collection.name}
@@ -47,7 +45,7 @@ block content
 					if item 
 						option(
 							value=category.id 
-							selected=(item.category.id == category.id ? 'true' : 'false')
+							selected=(item.category._id.toString() == category.id)
 						) #{category.name}
 					else 
 						option(value=category.id) #{category.name}
@@ -56,4 +54,4 @@ block content
 	if errors 
 		ul 
 			for error in errors 
-				li= error.message
+				li #{error.msg}
