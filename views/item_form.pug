@@ -1,0 +1,59 @@
+extends layout 
+
+block content 
+
+	- const checkedFunction = (size, itemSize) => size == itemSize ? true : '';
+
+	h1= title 
+
+	form(method='POST' action='')
+		div.form-element 
+			label(for='name') Name: 
+			input(id='name', class='text-input' name='name' type='text' placeholder='Pants, Gloves, Shirt...' required='true' value=(undefined==item ? '' : item.name))
+		div.form-element 
+			label(for='description') Description: 
+			input(id='description' class='text-input' name='description' type='text' placeholder='Complete description of the item...' required='true' value=(undefined==item ? '' : item.description))
+		div.form-element 
+			label(for='price') Price: 
+			input(id='price' class='text-input' name='price' type="text" placeholder='99.99' required='true' value=(undefined==item ? '' : item.price))
+		div.form-element 
+			label Available sizes: 
+			div.checkbox-input-container
+				- const sizes = ['XXS', 'XS', 'S', 'L', 'XL', 'XXL'];
+				each size in sizes 
+					div(style='display: inline')
+						if item 
+							input(class='checkbox-input' type='checkbox' name=size value=size checked=(checkedFunction(size, item.size)))
+						else 
+							input(class='checkbox-input' type='checkbox' name=size value=size)
+						label(for=size) #{size} 
+		div(class='form-element select-input-container')
+			label(for='collection') Collection 
+			select(id='collection' type='selection' name="collection" placeholder='Select collection' required='true')
+				-  collection_list.sort(function(a, b) {let textA = a.name.toUpperCase(); let textB = b.name.toUpperCase(); return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;});
+				each collection in collection_list 
+					if item 
+						option(
+							value=collection.id 
+							selected=(item.collection.id == collection.id ? 'true' : 'false')
+						) #{collection.name}
+					else 
+						option(value=collection.id) #{collection.name}
+		div(class='form-element select-input-container')
+			label(for='category') Category 
+			select(id='category' type='selection' name="category" placeholder='Select category' required='true')
+				-  category_list.sort(function(a, b) {let textA = a.name.toUpperCase(); let textB = b.name.toUpperCase(); return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;});
+				each category in category_list 
+					if item 
+						option(
+							value=category.id 
+							selected=(item.category.id == category.id ? 'true' : 'false')
+						) #{category.name}
+					else 
+						option(value=category.id) #{category.name}
+		button(class='submit-button' type='submit') Submit
+
+	if errors 
+		ul 
+			for error in errors 
+				li= error.message

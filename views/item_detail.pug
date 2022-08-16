@@ -1,0 +1,29 @@
+extends layout 
+
+block content 
+
+	h1 Item: #{item.name}
+
+	h3 Details: 
+	div
+		ul 
+			li #[strong Description:] #{item.description} 
+			li #[strong Price:] #{item.price} 
+			li #[strong Collection:] 
+				a(href=item.cloth_collection.url) #{item.cloth_collection.name} 
+			li #[strong Category:] 
+				a(href=item.category.url) #{item.category.name} 
+			li #[strong Sizes:] #{item.sizes.join(', ')}
+		
+		br
+		div #[strong Number of instances:] #{instance_list.length}
+			if instance_list.length > 0
+				lu 
+				each instance in instance_list 
+					li #[strong In #{instance.store}]: #{instance.number_in_stock}
+				
+	hr
+	p
+		a(href=item.url+'/delete') Delete item
+	p
+		a(href=item.url+'/update') Update item
