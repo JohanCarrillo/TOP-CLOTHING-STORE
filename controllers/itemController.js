@@ -110,16 +110,121 @@ function itemDeleteGet(req, res, next) {
 }
 
 function itemDeletePost(req, res, next) {
-	res.send("NOT IMPLEMENTED: item delete delete");
+	async.parallel(
+		{
+			foundItem(callback) {
+				Item.findById(req.params.id)
+					.populate("category")
+					.populate("cloth_collection")
+					.exec(callback);
+			},
+			itemInstances(callback) {
+				ItemInstance.find({ item: req.params.id }).exec(callback);
+			},
+		},
+		(err, results) => {
+			if (err) return next(err);
+			if (results.itemInstances.length > 0) {
+				res.render("item_delete", {
+					title: "Delete Item",
+					item: results.foundItem,
+					itemInstance_list: results.itemInstances,
+				});
+				return;
+			} else {
+				Item.findByIdAndRemove(req.body.itemId, err => {
+					if (err) return next(err);
+					res.redirect("/item");
+				});
+			}
+		}
+	);
 }
 
 function itemUpdateGet(req, res, next) {
-	res.send("NOT IMPLEMENTED: item update get");
+	async.parallel(
+		{
+			item(callback) {
+				Item.findById(req.params.id).exec(callback);
+			},
+			categories(callback) {
+				Category.find().exec(callback);
+			},
+			collections(callback) {
+				ClothCollection.find().exec(callback);
+			},
+		},
+		(err, results) => {
+			if (err) return next(err);
+			if (results.item == null) {
+				const err = new Error("Item not Found");
+				err.status = 404;
+				return next(err);
+			}
+			res.render("item_form", {
+				title: "Add New Item",
+				item: results.item,
+				collection_list: results.collections,
+				category_list: results.categories,
+			});
+		}
+	);
 }
 
-function itemUpdatePost(req, res, next) {
-	res.send("NOT IMPLEMENTED: item update put");
-}
+const itemUpdatePost = [
+	body("name", "Name must not be empty.").trim().isLength({ min: 1 }).escape(),
+	body("description", "Description must not be empty.")
+		.trim()
+		.isLength({ min: 1 }),
+	body("price", "Invalid price")
+		.trim()
+		.isLength({ min: 1 })
+		.isFloat({ min: 0 })
+		.toFloat(),
+
+	(req, res, next) => {
+		const errors = validationResult(req);
+
+		var item = new Item({
+			name: req.body.name,
+			description: req.body.description,
+			price: req.body.price,
+			cloth_collection: req.body.collection,
+			category: req.body.category,
+			sizes: req.body.size,
+			_id: req.params.id,
+		});
+
+		if (!errors.isEmpty()) {
+			async.parallel(
+				{
+					collections(callback) {
+						ClothCollection.find().exec(callback);
+					},
+					categories(callback) {
+						Category.find().exec(callback);
+					},
+				},
+				(err, results) => {
+					if (err) return next(err);
+					res.render("item_form", {
+						title: "Add New Item",
+						collection_list: results.collections,
+						category_list: results.categories,
+						item: item,
+						errors: errors.array(),
+					});
+				}
+			);
+			return;
+		} else {
+			Item.findByIdAndUpdate(req.params.id, item, {}, (err, updatedItem) => {
+				if (err) return next(err);
+				res.redirect(updatedItem.url);
+			});
+		}
+	},
+];
 
 function itemDetail(req, res, next) {
 	async.parallel(
